@@ -39,6 +39,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TNT.Utilities, Version=16.6.25.1738, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\TNT.Utilities.16.6.25.1738\lib\net45\TNT.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Key.cs" />
@@ -48,10 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Externals\TNT.Utilities\TNT.Utilities.csproj">
-      <Project>{026b1998-3b54-4964-b172-dd4ddadc3d3d}</Project>
-      <Name>TNT.Utilities</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
