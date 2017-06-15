@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Environment>
+	<FileQueries>
+		<FileQuery>
+			<OutputFileName>ZGEN_QA743.csv</OutputFileName>
+			<FilePaths>
+				<!--<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\LILI\Medicity.ProAccess.Service.dll</FilePath>-->
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\AffinityGateway\Medicity.CommunityServices.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\AffinityGateway IG\Medicity.CommunityServices.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\AffinityGateway IG  For GHH with MPI\Medicity.CommunityServices.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\Medicity.Logging\Medicity.Logging.EGY.exe</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\MediLog\Medicity.MediLog.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\MPI\Medicity.MPI.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\NexusEngine\NexusEngine.exe</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\PatientReferralService\Medicity.PatientReferral.Service.exe</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\ReferralProgressReport\Medicity.ReferralProgress.Service.exe</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\RMI\Medicity.RecordManagement.Index.exe</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\RMS_CDRProv_CC\Medicity.RecordManagement.Repositories.CDR.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\RMS_CDRProv_Community\Medicity.RecordManagement.Repositories.CDR.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\RMS_CDRProv_CTY\Medicity.RecordManagement.Repositories.CDR.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\RMS_CDRProv_LC\Medicity.RecordManagement.Repositories.CDR.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\RMS_JADRProv\Medicity.RecordManagement.Repositories.JADR.dll</FilePath>
+				<FilePath>\\slc-med-app5\Medicity\ZGEN\ZGEN_QA743\TaskManager\Medicity.Nexus.TaskManager.dll</FilePath>
+				<FilePath>\\slc-med-web7\ZGEN\ZGEN_QA743\CDRMaintenanceTool\bin\CDRMaintenance.Web.dll</FilePath>
+				<FilePath>\\slc-med-web7\ZGEN\ZGEN_QA743\NexusManager\Bin\NexusEngine.Domains.Modules.dll</FilePath>
+				<FilePath>\\slc-med-web7\ZGEN\ZGEN_QA743\PAMaint\bin\Medicity.ProAccess.Maintenance.Web.dll</FilePath>
+			</FilePaths>
+		</FileQuery>
+	</FileQueries>
+	<DBQueries>
+		<DBQuery>
+			<OutputFileName>ZGEN_QA743_db_app.csv</OutputFileName>
+			<ConnectionString>Data Source=slc-med-db5a;Initial Catalog=ZGEN_QA743_PAD;Integrated Security=True</ConnectionString>
+			<SQL>
+				select Name, DBVersionNumber, InstallDT, Comment from
+				(
+				select top 1 'CDR' Name, * from ZGEN_QA743_CDR_CC.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'CDR' Name, * from ZGEN_QA743_CDR_Community.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'CDR' Name, * from ZGEN_QA743_CDR_CTY.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'CDR' Name, * from ZGEN_QA743_CDR_LC.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'IdentityResolution' Name, * from ZGEN_QA743_IdentityResolution.dbo.DBVersion order by DBVersionID desc
+				union
+				select 'JADR' Name,'NA' DBVersionNumber, 'NA' InstallDT, 'NA' Comment, '' DBVersionID, '' BuildURL, '' BuildRev, '' UserName
+				--select 'JADR' 'Name', * from ZGEN_QA743_JADR.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'MediLog' Name, * from ZGEN_QA743_MediLog.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'MPI' Name, * from ZGEN_QA743_MPI.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'NexusEngine' Name, * from ZGEN_QA743_NexusEngine.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'PAD' Name, * from ZGEN_QA743_PAD.dbo.DBVersion order by DBVersionID desc
+				union
+				select 'PatientReferral' Name,'NA' DBVersionNumber, 'NA' InstallDT, 'NA' Comment, '' DBVersionID, '' BuildURL, '' BuildRev, '' UserName
+				--select * from (select top 1 'PatientReferral' 'Name', * from ZGEN_QA743_PatientReferral.dbo.DBVersion order by DBVersionID desc) s
+				union
+				select top 1 'Registry' Name, * from ZGEN_QA743_Registry.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'Reporting' Name, * from ZGEN_QA743_Reporting.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'RMI' Name, * from ZGEN_QA743_RMI.dbo.DBVersion order by DBVersionID desc
+				union
+				select top 1 'Worklists' Name, * from ZGEN_QA743_Worklists.dbo.DBVersion order by DBVersionID desc
+				) s
+			</SQL>
+		</DBQuery>
+		<DBQuery>
+			<OutputFileName>ZGEN_QA743_db_nexus_modules.csv</OutputFileName>
+			<ConnectionString>Data Source=slc-med-db5a;Initial Catalog=ZGEN_QA743_NexusEngine;Integrated Security=True</ConnectionString>
+			<SQL>
+				select distinct Name, FileVersion
+				from Assemblies a
+				inner join Instances i on a.AssemblyID = i.AssemblyID
+				where a.Deleted = 0
+			</SQL>
+		</DBQuery>
+	</DBQueries>
+</Environment>
