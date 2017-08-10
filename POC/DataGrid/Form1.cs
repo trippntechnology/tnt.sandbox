@@ -20,8 +20,7 @@ namespace DataGrid
 				_Inventory.Add(new Part()
 					{
 						Code = "Code"+i,
-						Description = "Description"+i,
-						Quantity = i
+						Description = "Description"+i
 					});
 			}
 		}
@@ -32,9 +31,9 @@ namespace DataGrid
 			DataGridForm dgf = new DataGridForm();
 
 			// Bind the inventory to the partsBindingSource that is associated with the ComboBox
-			dgf.partsBindingSource.DataSource = _Inventory;
+			dgf.inventoryBindingSource.DataSource = _Inventory;
 
-		  // Bind the parts with the grid's datasource
+			// Bind the parts with the grid's datasource
 			dgf.dataGridView1.DataSource = _Parts;
 
 			dgf.Show();

@@ -45,10 +45,21 @@ namespace DataGrid
 					dataGridView1.Rows[row].Cells[0].Value = part.Code;
 				}
 
+				dataGridView1.Rows[row].Cells[2].Value = 0;
+
 			}
 			catch (Exception)
 			{
 			}
+		}
+
+		private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			int col = dataGridView1.CurrentCell.ColumnIndex;
+			int row = dataGridView1.CurrentCell.RowIndex;
+			Parts parts = dataGridView1.DataSource as Parts;
+
+			parts.RemoveAt(row);
 		}
 	}
 }

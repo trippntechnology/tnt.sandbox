@@ -30,15 +30,15 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.partsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-			this.personsBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.codeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.inventoryBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.costDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.partsBindingSource)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.personsBindingSource)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.inventoryBindingSource)).BeginInit();
+			this.contextMenuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// dataGridView1
@@ -48,30 +48,24 @@
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.codeDataGridViewTextBoxColumn,
             this.descriptionDataGridViewTextBoxColumn,
-            this.quantityDataGridViewTextBoxColumn,
             this.costDataGridViewTextBoxColumn});
-			this.dataGridView1.DataSource = this.partsBindingSource;
+			this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
+			this.dataGridView1.DataSource = this.inventoryBindingSource;
 			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
 			this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+			this.dataGridView1.MultiSelect = false;
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.RowHeadersVisible = false;
-			this.dataGridView1.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.Empty;
+			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dataGridView1.Size = new System.Drawing.Size(459, 388);
 			this.dataGridView1.TabIndex = 0;
 			this.dataGridView1.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView1_EditingControlShowing);
 			// 
-			// partsBindingSource
-			// 
-			this.partsBindingSource.DataSource = typeof(DataGrid.Parts);
-			// 
-			// personsBindingSource
-			// 
-			this.personsBindingSource.AllowNew = true;
-			// 
 			// codeDataGridViewTextBoxColumn
 			// 
 			this.codeDataGridViewTextBoxColumn.DataPropertyName = "Code";
-			this.codeDataGridViewTextBoxColumn.DataSource = this.partsBindingSource;
+			this.codeDataGridViewTextBoxColumn.DataSource = this.inventoryBindingSource;
 			this.codeDataGridViewTextBoxColumn.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.codeDataGridViewTextBoxColumn.HeaderText = "Code";
 			this.codeDataGridViewTextBoxColumn.Name = "codeDataGridViewTextBoxColumn";
@@ -79,10 +73,14 @@
 			this.codeDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.codeDataGridViewTextBoxColumn.ValueMember = "Code";
 			// 
+			// inventoryBindingSource
+			// 
+			this.inventoryBindingSource.DataSource = typeof(DataGrid.Parts);
+			// 
 			// descriptionDataGridViewTextBoxColumn
 			// 
 			this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
-			this.descriptionDataGridViewTextBoxColumn.DataSource = this.partsBindingSource;
+			this.descriptionDataGridViewTextBoxColumn.DataSource = this.inventoryBindingSource;
 			this.descriptionDataGridViewTextBoxColumn.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
 			this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
@@ -90,17 +88,25 @@
 			this.descriptionDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.descriptionDataGridViewTextBoxColumn.ValueMember = "Description";
 			// 
-			// quantityDataGridViewTextBoxColumn
-			// 
-			this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
-			this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
-			this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
-			// 
 			// costDataGridViewTextBoxColumn
 			// 
 			this.costDataGridViewTextBoxColumn.DataPropertyName = "Cost";
 			this.costDataGridViewTextBoxColumn.HeaderText = "Cost";
 			this.costDataGridViewTextBoxColumn.Name = "costDataGridViewTextBoxColumn";
+			// 
+			// contextMenuStrip1
+			// 
+			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteToolStripMenuItem});
+			this.contextMenuStrip1.Name = "contextMenuStrip1";
+			this.contextMenuStrip1.Size = new System.Drawing.Size(108, 26);
+			// 
+			// deleteToolStripMenuItem
+			// 
+			this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.deleteToolStripMenuItem.Text = "Delete";
+			this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
 			// 
 			// DataGridForm
 			// 
@@ -111,20 +117,20 @@
 			this.Name = "DataGridForm";
 			this.Text = "DataGridForm";
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.partsBindingSource)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.personsBindingSource)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.inventoryBindingSource)).EndInit();
+			this.contextMenuStrip1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.BindingSource personsBindingSource;
 		public System.Windows.Forms.DataGridView dataGridView1;
-		public System.Windows.Forms.BindingSource partsBindingSource;
+		public System.Windows.Forms.BindingSource inventoryBindingSource;
 		private System.Windows.Forms.DataGridViewComboBoxColumn codeDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewComboBoxColumn descriptionDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn quantityDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn costDataGridViewTextBoxColumn;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
 	}
 }
