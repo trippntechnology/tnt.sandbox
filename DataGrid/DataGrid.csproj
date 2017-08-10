@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DataGrid</RootNamespace>
     <AssemblyName>DataGrid</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -70,7 +71,6 @@
     </Compile>
     <Compile Include="HISP_LogDataSet.cs">
       <DependentUpon>HISP_LogDataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="HISP_LogDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -102,9 +102,11 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="DataSources\Parts.datasource" />
-    <None Include="DataSources\Persons.datasource" />
+    <None Include="DataSources\Parts.datasource">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="HISP_LogDataSet.xsc">
       <DependentUpon>HISP_LogDataSet.xsd</DependentUpon>
     </None>
@@ -116,6 +118,7 @@
     <None Include="HISP_LogDataSet.xss">
       <DependentUpon>HISP_LogDataSet.xsd</DependentUpon>
     </None>
+    <None Include="DataSources\Inventory.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -129,6 +132,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

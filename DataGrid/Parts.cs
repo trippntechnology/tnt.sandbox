@@ -9,6 +9,8 @@ namespace DataGrid
 {
 	public class Parts:BindingList<Part>
 	{
+		public int Quantity { get; set; }
+
 		public Parts()
 		{
 
