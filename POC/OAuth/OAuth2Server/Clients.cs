@@ -1,9 +1,5 @@
-﻿using System;
+﻿using IdentityServer3.Core.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IdentityServer3.Core.Models;
 
 namespace OAuth2Server
 {
@@ -32,6 +28,17 @@ namespace OAuth2Server
 										{
 												"api1"
 										}
+								},
+								new Client
+								{
+									ClientName = "WIN",
+									ClientId = "367af82b-5c8e-47f9-b881-c84401632655",
+									Enabled = true,
+									//AccessTokenType = AccessTokenType.Reference,
+									Flow = Flows.AuthorizationCode,
+									//ClientSecrets = new List<Secret>{new Secret("".Sha256())},
+									AllowedScopes = new List<string>{"api1"},
+									RedirectUris = new List<string> {"https://hisp1.com"}
 								},
 
                 // human is involved
