@@ -15,7 +15,8 @@ namespace Async
 		private async void button1_Click(object sender, EventArgs e)
 		{
 			tb.AppendText("Button clicked");
-			await WaitAsynchronouslyAsync();
+			var result = await CallThread();
+			tb.AppendText($"WaitAsynchronouslyAsync returned  (${result})");
 		}
 
 		// The following method runs asynchronously. The UI thread is not
@@ -23,8 +24,8 @@ namespace Async
 		// while Task.Delay is running.
 		public async Task<string> WaitAsynchronouslyAsync()
 		{
-			tb.AppendText("\r\nWaiting 10 seconds ...");
-			await Task.Delay(10000);
+			tb.AppendText("\r\nWaiting 3 seconds ...");
+			await Task.Delay(3000);
 			tb.AppendText("done");
 			return "Finished";
 		}
@@ -37,6 +38,17 @@ namespace Async
 			// Add a using directive for System.Threading.
 			Thread.Sleep(10000);
 			return "Finished";
+		}
+
+		public async Task<string> CallThread()
+		{
+			var result = await Task.Run<string>(() =>
+			{
+				Thread.Sleep(5000);
+				return "done";
+			});
+
+			return result;
 		}
 	}
 }
