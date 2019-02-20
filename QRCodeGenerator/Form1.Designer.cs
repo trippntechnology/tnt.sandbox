@@ -36,24 +36,26 @@
 			// 
 			// textBox1
 			// 
-			this.textBox1.Location = new System.Drawing.Point(12, 12);
+			this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.textBox1.Location = new System.Drawing.Point(0, 0);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(238, 236);
+			this.textBox1.Size = new System.Drawing.Size(693, 61);
 			this.textBox1.TabIndex = 0;
 			this.textBox1.WordWrap = false;
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Location = new System.Drawing.Point(435, 12);
+			this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pictureBox1.Location = new System.Drawing.Point(0, 61);
 			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(246, 236);
+			this.pictureBox1.Size = new System.Drawing.Size(693, 557);
 			this.pictureBox1.TabIndex = 1;
 			this.pictureBox1.TabStop = false;
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(303, 265);
+			this.button1.Location = new System.Drawing.Point(606, 27);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 2;
