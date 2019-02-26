@@ -1,43 +1,80 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FontPreviewer
 {
 	public partial class Form1 : Form
 	{
+		CancellationTokenSource cts = null;
+
 		public Form1()
 		{
 			InitializeComponent();
 		}
 
-		private void textBox1_KeyUp(object sender, KeyEventArgs e)
+		private async void textBox1_KeyUp(object sender, KeyEventArgs e)
 		{
-
+			Debug.WriteLine("textBox1_KeyUp called");
+			await PreviewFontsAsync();
+			Debug.WriteLine("textBox1_KeyUp exited");
 		}
-
-		private void PreviewFonts()
+		private async Task PreviewFontsAsync()
 		{
-			var fonts = new List<FontFamily>();
-
-			foreach (FontFamily font in System.Drawing.FontFamily.Families)
-			{
-				fonts.Add(font);
-			}
 			richTextBox.Clear();
+			if (String.IsNullOrWhiteSpace(textBox.Text)) return;
 
-			foreach (var fontFamily in fonts)
-			////for (var i = 0; i < 5; i++)
+			IProgress<Font> progress1 = new Progress<Font>(font =>
 			{
-				//var fontFamily = fonts[i];
-				richTextBox.SelectionFont = new Font(fontFamily, 20f);
-				richTextBox.AppendText($"{fontFamily.Name}\n\t{textBox.Text}\n");
+				richTextBox.SelectionFont = font;
+			});
+
+			IProgress<Tuple<string, string>> progress2 = new Progress<Tuple<string, string>>(tuple =>
+				{
+					richTextBox.AppendText($"{tuple.Item1}\n\t{tuple.Item2}\n");
+				});
+
+			if (cts != null)
+			{
+				Debug.WriteLine("Task canceled");
+				cts.Cancel();
 			}
+
+			cts = new CancellationTokenSource();
+
+			await Task.Run(() =>
+			 {
+				 Debug.WriteLine("Task started");
+				 var token = cts.Token;
+				 Thread.Sleep(300);
+
+				 var fonts = new List<FontFamily>();
+
+				 foreach (FontFamily font in System.Drawing.FontFamily.Families)
+				 {
+					 fonts.Add(font);
+				 }
+
+				 foreach (var fontFamily in fonts)
+				 {
+					 if (token.IsCancellationRequested) break;
+					 progress1.Report(new Font(fontFamily, 20f));
+					 progress2.Report(new Tuple<string, string>(fontFamily.Name, textBox.Text));
+					 Thread.Sleep(10);
+				 }
+
+				 Debug.WriteLine("Task complete");
+			 });
 		}
 
-		private void button1_Click(object sender, System.EventArgs e)
+		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			PreviewFonts();
+			// This is needed to cancel the Task before closing.
+			cts?.Cancel();
 		}
 	}
 }
