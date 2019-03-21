@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace Maze
@@ -108,9 +109,7 @@ namespace Maze
 		{
 			if (saveFileDialog1.ShowDialog() == DialogResult.OK)
 			{
-				//var bitmap = new Bitmap(panel1.Width, panel1.Height);
-				//panel1.DrawToBitmap(bitmap, panel1.Bounds);
-				_bitmap.Save(saveFileDialog1.FileName);
+				_bitmap.Save(saveFileDialog1.FileName, ImageFormat.Jpeg);
 			}
 		}
 	}
