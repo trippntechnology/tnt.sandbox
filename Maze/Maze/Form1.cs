@@ -19,25 +19,34 @@ namespace Maze
 		const int PATH_WIDTH = POINT_SPACING - 2;
 
 		private Pen _Pen = new Pen(Color.White, PATH_WIDTH) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+		private Pen PathPen = new Pen(Color.Red, PATH_WIDTH-4) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 		private Graphics _Graphics = null;
 		private Random _Random = new Random();
 		private Bitmap _bitmap;
 		private Graphics bGraphics;
 
+		private Point startPoint;
+		private Point endPoint;
+
 		Dictionary<Point, int> VisitedPoints = new Dictionary<Point, int>();
+		Dictionary<Point, List<Point>> PointMap = new Dictionary<Point, List<Point>>();
 
 		public Form1()
 		{
 			InitializeComponent();
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
 			_Graphics = panel1.CreateGraphics();
 			_bitmap = new Bitmap(panel1.Width, panel1.Height);
 			bGraphics = Graphics.FromImage(_bitmap);
 			RIGHT_BOUNDARY = panel1.Width - BOUNDARY_PADDING;
 			BOTTOM_BOUNDARY = panel1.Height - BOUNDARY_PADDING;
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
+			bGraphics.FillRectangle(new SolidBrush(Color.Black), panel1.Bounds);
+			_Graphics.FillRectangle(new SolidBrush(Color.Black), panel1.Bounds);
+			VisitedPoints.Clear();
+			PointMap.Clear();
 			var point = new Point(10, 10);
 			VisitedPoints.Add(point, 0);
 			DrawNextPoint(point);
@@ -45,18 +54,27 @@ namespace Maze
 
 		private void DrawNextPoint(Point currentPoint)
 		{
+			if (!PointMap.TryGetValue(currentPoint, out List<Point> pointList))
+			{
+				pointList = new List<Point>();
+				PointMap[currentPoint] = pointList;
+			}
+
 			var nextPoint = GetNextPoint(currentPoint);
 			while (nextPoint != null)
 			{
+				pointList.Add((Point)nextPoint);
 				//_Graphics.DrawLine(_Pen, currentPoint, (Point)nextPoint);
 				bGraphics.DrawLine(_Pen, currentPoint, (Point)nextPoint);
+				_Graphics.DrawLine(_Pen, currentPoint, (Point)nextPoint);
 				Debug.WriteLine($"DrawTo: {nextPoint}");
+
 				//Thread.Sleep(10);
 				DrawNextPoint((Point)nextPoint);
 				nextPoint = GetNextPoint(currentPoint);
 			}
 
-			_Graphics.DrawImage(_bitmap, new Point(0, 0));
+			//_Graphics.DrawImage(_bitmap, new Point(0, 0));
 		}
 
 		private Point? GetNextPoint(Point point)
@@ -110,6 +128,76 @@ namespace Maze
 			if (saveFileDialog1.ShowDialog() == DialogResult.OK)
 			{
 				_bitmap.Save(saveFileDialog1.FileName, ImageFormat.Jpeg);
+			}
+		}
+
+		private void panel1_MouseMove(object sender, MouseEventArgs e)
+		{
+			var point = normalizePoint(e.Location);
+			label1.Text = $"X = {point.X}   Y = {point.Y}";
+		}
+
+		private Point normalizePoint(Point point)
+		{
+			var x = ((point.X + (POINT_SPACING / 2)) / POINT_SPACING) * POINT_SPACING;
+			var y = ((point.Y + (POINT_SPACING / 2)) / POINT_SPACING) * POINT_SPACING;
+			return new Point(x, y);
+		}
+
+		private void panel1_Resize(object sender, EventArgs e)
+		{
+			RIGHT_BOUNDARY = panel1.Width - BOUNDARY_PADDING;
+			BOTTOM_BOUNDARY = panel1.Height - BOUNDARY_PADDING * 2;
+		}
+
+		private void panel1_MouseUp(object sender, MouseEventArgs e)
+		{
+			switch (e.Button)
+			{
+				case MouseButtons.Left:
+					startPoint = normalizePoint(e.Location);
+					label2.Text = startPoint.ToString();
+					break;
+				case MouseButtons.Right:
+					endPoint = normalizePoint(e.Location);
+					label3.Text = endPoint.ToString();
+					break;
+			}
+		}
+
+		private void panel2_Paint(object sender, PaintEventArgs e)
+		{
+
+		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			// Get start points children
+			var points = PointMap[startPoint];
+			_Graphics.DrawImage(_bitmap, new Point(0, 0));
+			FindEndPoint(startPoint);
+		}
+
+		private bool FindEndPoint(Point currentPoint)
+		{
+			if (currentPoint == this.endPoint)
+			{
+				return true;
+			}
+			else
+			{
+				var foundEndPoint = false;
+
+				PointMap[currentPoint].ForEach(p =>
+				{
+					if (!foundEndPoint && FindEndPoint(p))
+					{
+						_Graphics.DrawLine(PathPen, currentPoint, p);
+						foundEndPoint = true;
+					}
+				});
+
+				return foundEndPoint;
 			}
 		}
 	}
