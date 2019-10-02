@@ -16,23 +16,29 @@ namespace CenteredDrawing
 		private int ShadowOffset = 10;
 		private int CanvasWidth = 500;
 		private int CanvasHeight = (int)(500 * 8.5 / 11);
-		private int Zoom = 100;
+		private int ScalePercentage = 100;
 
-		private int ZoomedWidth { get { return (int)(CanvasWidth * Zoom / 100); } }
-		private int ZoomedHeight { get { return (int)(CanvasHeight * Zoom / 100); } }
+		private int ScaledWidth { get { return (int)(CanvasWidth * ScalePercentage / 100); } }
+		private int ScaledHeight { get { return (int)(CanvasHeight * ScalePercentage / 100); } }
 
 		private KeyEventArgs keyEventArgs = null;
+
+		public MyControl(Control parent, int left, int top, int width, int height)
+			: base(parent, string.Empty, left, top, width, height)
+		{
+			parent.SizeChanged += OnParentResize;
+		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var shadowLeft = LeftOffset + ShadowOffset;
 			var shadowTop = TopOffset + ShadowOffset;
 			var graphics = e.Graphics;
-			graphics.FillRectangle(ShadowBrush, shadowLeft, shadowTop, ZoomedWidth, ZoomedHeight);
-			graphics.FillRectangle(FillBrush, LeftOffset, TopOffset, ZoomedWidth, ZoomedHeight);
-			graphics.DrawRectangle(DrawPen, LeftOffset, TopOffset, ZoomedWidth, ZoomedHeight);
-			graphics.DrawRectangle(DrawPen, LeftOffset + 10, TopOffset + 10, ZoomedWidth - 20, ZoomedHeight - 20);
-			Debug.WriteLine($"LeftOffset: {LeftOffset}  TopOffset: {TopOffset}  WIDTH: {ZoomedWidth}  HEIGHT: {ZoomedHeight}");
+			graphics.FillRectangle(ShadowBrush, shadowLeft, shadowTop, ScaledWidth, ScaledHeight);
+			graphics.FillRectangle(FillBrush, LeftOffset, TopOffset, ScaledWidth, ScaledHeight);
+			graphics.DrawRectangle(DrawPen, LeftOffset, TopOffset, ScaledWidth, ScaledHeight);
+			graphics.DrawRectangle(DrawPen, LeftOffset + 10, TopOffset + 10, ScaledWidth - 20, ScaledHeight - 20);
+			Debug.WriteLine($"LeftOffset: {LeftOffset}  TopOffset: {TopOffset}  WIDTH: {ScaledWidth}  HEIGHT: {ScaledHeight}");
 			base.OnPaint(e);
 		}
 
@@ -51,14 +57,14 @@ namespace CenteredDrawing
 			var wheelDelta = SystemInformation.MouseWheelScrollDelta;
 			var detents = e.Delta / wheelDelta * 10;
 
-			if (keyEventArgs?.Control == true)
+			if (keyEventArgs?.Control == true && ScalePercentage + detents > 0)
 			{
-				Zoom += detents;
+				ScalePercentage += detents;
 				Position(Parent);
 				Refresh();
 			}
 
-			Debug.WriteLine($"X: {e.X}  Y: {e.Y}  Delta: {e.Delta}  WHEEL_DELTA: {wheelDelta}  Location: {e.Location}  Zoom: {Zoom}");
+			Debug.WriteLine($"X: {e.X}  Y: {e.Y}  Delta: {e.Delta}  WHEEL_DELTA: {wheelDelta}  Location: {e.Location}  Zoom: {ScalePercentage}");
 		}
 
 		protected override void OnClick(EventArgs e)
@@ -67,7 +73,7 @@ namespace CenteredDrawing
 			base.OnClick(e);
 		}
 
-		public void OnParentResize(object sender, EventArgs e)
+		private void OnParentResize(object sender, EventArgs e)
 		{
 			Position(sender);
 			Refresh();
@@ -78,27 +84,27 @@ namespace CenteredDrawing
 			var clientRect = (sender as Control).ClientRectangle;
 			var form = sender as Form;
 
-			if (clientRect.Width <= ZoomedWidth)
+			if (clientRect.Width <= ScaledWidth)
 			{
 				LeftOffset = 0;
 			}
 			else
 			{
-				LeftOffset = clientRect.Width / 2 - ZoomedWidth / 2;
+				LeftOffset = clientRect.Width / 2 - ScaledWidth / 2;
 			}
 
-			Width = LeftOffset * 2 + ZoomedWidth;
+			Width = LeftOffset * 2 + ScaledWidth;
 
-			if (clientRect.Height <= ZoomedHeight)
+			if (clientRect.Height <= ScaledHeight)
 			{
 				TopOffset = 0;
 			}
 			else
 			{
-				TopOffset = clientRect.Height / 2 - ZoomedHeight / 2;
+				TopOffset = clientRect.Height / 2 - ScaledHeight / 2;
 			}
 
-			Height = TopOffset * 2 + ZoomedHeight;
+			Height = TopOffset * 2 + ScaledHeight;
 
 			var result = (sender as Form).Let(f =>
 			{

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CenteredDrawing", "CenteredDrawing\CenteredDrawing.csproj", "{F11C09F3-224A-4F79-A57D-6DA8C139D6BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CenteredDrawing", "CenteredDrawing.csproj", "{F11C09F3-224A-4F79-A57D-6DA8C139D6BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9ED6A074-574D-4091-A12F-BC940B5382E1}
+		SolutionGuid = {DF213BE5-A34C-4379-8BC8-C40AFA525AA4}
 	EndGlobalSection
 EndGlobal
