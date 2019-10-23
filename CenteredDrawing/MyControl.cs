@@ -16,7 +16,7 @@ namespace CenteredDrawing
 		private int ShadowOffset = 10;
 		private int CanvasWidth = 500;
 		private int CanvasHeight = (int)(500 * 8.5 / 11);
-		private int ScalePercentage = 100;
+		private float ScalePercentage = 100.0f;
 
 		private int ScaledWidth { get { return (int)(CanvasWidth * ScalePercentage / 100); } }
 		private int ScaledHeight { get { return (int)(CanvasHeight * ScalePercentage / 100); } }
@@ -42,29 +42,23 @@ namespace CenteredDrawing
 			base.OnPaint(e);
 		}
 
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			keyEventArgs = e;
-		}
-
-		protected override void OnKeyUp(KeyEventArgs e)
-		{
-			keyEventArgs = e;
-		}
+		protected override void OnKeyDown(KeyEventArgs e) => keyEventArgs = e;
+		protected override void OnKeyUp(KeyEventArgs e) => keyEventArgs = e;
 
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
 			var wheelDelta = SystemInformation.MouseWheelScrollDelta;
-			var detents = e.Delta / wheelDelta * 10;
+			var detents = e.Delta / (wheelDelta);// * 10.0);
+			var amp = keyEventArgs?.Shift == true ? 2 : 1;
 
 			if (keyEventArgs?.Control == true && ScalePercentage + detents > 0)
 			{
-				ScalePercentage += detents;
+				ScalePercentage += detents * amp;
 				Position(Parent);
 				Refresh();
 			}
 
-			Debug.WriteLine($"X: {e.X}  Y: {e.Y}  Delta: {e.Delta}  WHEEL_DELTA: {wheelDelta}  Location: {e.Location}  Zoom: {ScalePercentage}");
+			Debug.WriteLine($"X: {e.X}  Y: {e.Y}  detents: {detents}  Delta: {e.Delta}  WHEEL_DELTA: {wheelDelta}  Location: {e.Location}  Zoom: {ScalePercentage}");
 		}
 
 		protected override void OnClick(EventArgs e)
