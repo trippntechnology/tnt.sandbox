@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Windows;
 
 namespace CenteredDrawing
 {
@@ -14,6 +16,11 @@ namespace CenteredDrawing
 		{
 			if (value == null) return default(T);
 			return block(value);
+		}
+
+		public static RectangleF Scale(this Rectangle rectangle, float scaleBy)
+		{
+			return new RectangleF(rectangle.X * scaleBy, rectangle.Y * scaleBy, rectangle.Width * scaleBy, rectangle.Height * scaleBy);
 		}
 	}
 }

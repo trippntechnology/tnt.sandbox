@@ -16,9 +16,17 @@ namespace CenteredDrawing
 
 		public Form1()
 		{
-			applicationRegistery = new ApplicationRegistry(this, Registry.CurrentUser, "Tripp'n Technology", "CenteredDrawing");
-			_MyControl = new MyControl(this, 0, 0, this.Width, this.Height);
 			InitializeComponent();
+			applicationRegistery = new ApplicationRegistry(this, Registry.CurrentUser, "Tripp'n Technology", "CenteredDrawing");
+			_MyControl = new MyControl(splitContainer1.Panel1, 0, 0, splitContainer1.Panel1.Width, splitContainer1.Panel1.Height);
+			_MyControl.BackColor = Color.Yellow;
+		}
+
+		private void trackBar1_Scroll(object sender, System.EventArgs e)
+		{
+			var width = trackBar1.Value;
+			var height = trackBar2.Value;
+			_MyControl.SetCanvasSize(width, height);
 		}
 	}
 }
