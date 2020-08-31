@@ -43,9 +43,9 @@ namespace TNTDrawing
 		protected Rectangle _Rect = new Rectangle(0, 0, 1024, 768);
 
 		/// <summary>
-		/// The <see cref="Image"/> that is drawn by the grid
+		/// The <see cref="GridImage"/> that is drawn by the grid
 		/// </summary>
-		protected Bitmap Image { get; set; }
+		protected Bitmap GridImage { get; set; }
 
 		/// <summary>
 		/// Delegate that is called when the <see cref="Grid"/> needs to be refreshed. 
@@ -164,12 +164,9 @@ namespace TNTDrawing
 			{
 				Debug.WriteLine($"Drawing image");
 				var largeSegment = PixelsPerSegment * 10;
-				Image = new Bitmap(canvasWidth+10, canvasHeight+10);
-				var imageGraphics = Graphics.FromImage(Image);
+				GridImage = new Bitmap(canvasWidth, canvasHeight);
+				var imageGraphics = Graphics.FromImage(GridImage);
 
-				var shadowRect = Rectangle.Inflate(this.Rect, 0, 0);
-				shadowRect.Offset(10, 10);
-				imageGraphics.FillRectangle(ShadowBrush, shadowRect);
 				imageGraphics.FillRectangle(BackgroundBrush, Rect);
 
 				for (int x = 0; x < canvasWidth; x += PixelsPerSegment)
@@ -187,7 +184,7 @@ namespace TNTDrawing
 				ForceDraw = false;
 			}
 
-			graphics.DrawImage(Image, Rect);
+			graphics.DrawImage(GridImage, Rect);
 		}
 		private void Refresh()
 		{
