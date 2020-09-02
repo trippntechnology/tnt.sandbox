@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using TNT.Utilities;
@@ -9,19 +10,21 @@ namespace CenteredDrawing
 	public partial class Form1 : Form
 	{
 		private ApplicationRegistry applicationRegistery = null;
-
-		private const int WIDTH = 850;
-		private const int HEIGHT = 1100;
-		private Brush BlackBrush = new SolidBrush(Color.Black);
-		private Canvas _MyControl = null;
+		private CanvasPanel _MyControl = null;
 
 		public Form1()
 		{
 			InitializeComponent();
 			applicationRegistery = new ApplicationRegistry(this, Registry.CurrentUser, "Tripp'n Technology", "CenteredDrawing");
-			_MyControl = new Canvas(splitContainer1.Panel1, 0, 0, splitContainer1.Panel1.Width, splitContainer1.Panel1.Height);
-			_MyControl.BackColor = Color.Yellow;
-			_MyControl.MouseMove += _MyControl_MouseMove;
+			//_MyControl = new Canvas(splitContainer1.Panel1, 0, 0, splitContainer1.Panel1.Width, splitContainer1.Panel1.Height);
+			//_MyControl.BackColor = Color.Yellow;
+			//_MyControl.MouseMove += _MyControl_MouseMove;
+			_MyControl = new CanvasPanel(this)
+			{
+				Parent = splitContainer1.Panel1,
+				Width = splitContainer1.Panel1.Width,
+				Height = splitContainer1.Panel1.Height
+			};
 			propertyGrid1.SelectedObject = _MyControl;
 		}
 

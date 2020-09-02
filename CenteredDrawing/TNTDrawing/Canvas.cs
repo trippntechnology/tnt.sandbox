@@ -75,13 +75,13 @@ namespace TNTDrawing
 		/// </summary>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			//Debug.WriteLine($"OnPaint");
+			Debug.WriteLine($"OnPaint AdjustPostion: {AdjustPostion}");
 			UpdateClientDimensions();
 			var graphics = GetTransformedGraphics(e.Graphics);
 
 			Grid.Draw(graphics);
 
-			var point = new Point(300, 300);//.ToCanvasCoordinates(graphics);
+			var point = new Point(300, 300);
 			graphics.FillEllipse(RedBrush, new Rectangle(point.Subtract(new Point(2, 2)), new Size(4, 4)));
 
 			if (AdjustPostion) RepositionToAlignWithMouse(PointToClient(Cursor.Position), graphics);
@@ -126,8 +126,6 @@ namespace TNTDrawing
 			var prevPositionOnGrid = PositionOnGrid;
 			PositionOnGrid = origPoint.ToGridCoordinates(graphics);
 
-			//Debug.WriteLine($"[OnMouseMove] origPoint: {origPoint}  prevPositionOnGrid: {prevPositionOnGrid}  PositionOnGrid: {PositionOnGrid}  AdjustPostion: {AdjustPostion}");
-
 			if (keyEventArgs?.KeyCode == Keys.Space)
 			{
 				var xDelta = CurrentMousePosition.X - cursorPosition.X;
@@ -138,9 +136,6 @@ namespace TNTDrawing
 
 			CurrentMousePosition.X = cursorPosition.X;
 			CurrentMousePosition.Y = cursorPosition.Y;
-
-			//Debug.WriteLine($"{PointToClient(cursorPosition)}  {cursorPosition.DeviceToPage(graphics)} {cursorPosition.DeviceToWorld(graphics)}");
-			//Debug.WriteLine($@"xDelta: {xDelta}  yDelta: {yDelta}");
 
 			Focus();
 			base.OnMouseMove(e);
