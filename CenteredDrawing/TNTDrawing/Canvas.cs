@@ -14,11 +14,12 @@ namespace TNTDrawing
 	{
 		private const int MINIMUM_PADDING = 1000;
 
+		private readonly ScrollableControl ScrollableParent = null;
+		private readonly Brush BlackBrush = new SolidBrush(Color.Black);
+
 		private int _ScalePercentage = 100;
 		private Point CurrentMousePosition = Point.Empty;
-		private readonly Brush RedBrush = new SolidBrush(Color.Red);
 		private KeyEventArgs keyEventArgs = null;
-		private ScrollableControl ScrollableParent = null;
 		private Point PositionOnGrid;
 		private bool AdjustPostion = false;
 
@@ -82,7 +83,7 @@ namespace TNTDrawing
 			Grid.Draw(graphics);
 
 			var point = new Point(300, 300);
-			graphics.FillEllipse(RedBrush, new Rectangle(point.Subtract(new Point(2, 2)), new Size(4, 4)));
+			graphics.FillEllipse(BlackBrush, new Rectangle(point.Subtract(new Point(4, 4)), new Size(8, 8)));
 
 			if (AdjustPostion) RepositionToAlignWithMouse(PointToClient(Cursor.Position), graphics);
 
@@ -91,12 +92,9 @@ namespace TNTDrawing
 
 		private void RepositionToAlignWithMouse(Point canvasPosition, Graphics graphics)
 		{
-			var prevPositionOnGrid = PositionOnGrid;
-			PositionOnGrid = canvasPosition.ToGridCoordinates(graphics);
-			var prevCanvasPosition = prevPositionOnGrid.ToCanvasCoordinates(graphics);
-			var xDelta = prevPositionOnGrid.X - PositionOnGrid.X;
-			var yDelta = prevPositionOnGrid.Y - PositionOnGrid.Y;
-			Debug.WriteLine($@"prevPositionOnGrid: {prevPositionOnGrid} PositionOnGrid: {PositionOnGrid}  prevCanvasPosition: {prevCanvasPosition} canvasPosition: {canvasPosition}  xDelta: {xDelta}  yDelta: {yDelta}");
+			var prevCanvasPosition = PositionOnGrid.ToCanvasCoordinates(graphics);
+			var xDelta = prevCanvasPosition.X - canvasPosition.X;
+			var yDelta = prevCanvasPosition.Y - canvasPosition.Y;
 			ScrollableParent.HorizontalScroll.ChangeBy(xDelta);
 			ScrollableParent.VerticalScroll.ChangeBy(yDelta);
 			AdjustPostion = false;
@@ -167,9 +165,9 @@ namespace TNTDrawing
 
 			if (keyEventArgs?.Control == true && ScalePercentage + detents > 0)
 			{
+				// Adjust position when Paint() is called
 				AdjustPostion = true;
 				var graphics = GetTransformedGraphics();
-
 				var positionOnCanvas = new Point(e.X, e.Y);
 				PositionOnGrid = positionOnCanvas.ToGridCoordinates(graphics);
 				Debug.WriteLine($@"[OnMouseWheel] positionOnCanvas: {positionOnCanvas}  PositionOnGrid: {PositionOnGrid}");
