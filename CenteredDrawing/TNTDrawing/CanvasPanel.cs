@@ -20,6 +20,9 @@ namespace TNTDrawing
 		public CanvasPanel(Control parent)
 			: base()
 		{
+			Parent = parent;
+			Width = parent.Width;
+			Height = parent.Height;
 			Dock = DockStyle.Fill;
 			Canvas = new Canvas(this, 0, 0, Width, Height);
 			Canvas.BackColor = Color.Yellow;
@@ -30,5 +33,7 @@ namespace TNTDrawing
 		/// Prevents scroll from resetting when it gets focus
 		/// </summary>
 		protected override Point ScrollToControl(Control activeControl) => DisplayRectangle.Location;
+
+		public void Fit() => Canvas.Fit();
 	}
 }

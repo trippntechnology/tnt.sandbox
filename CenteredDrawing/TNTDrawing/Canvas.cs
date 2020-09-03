@@ -18,15 +18,29 @@ namespace TNTDrawing
 		private readonly Brush BlackBrush = new SolidBrush(Color.Black);
 
 		private int _ScalePercentage = 100;
-		private Point CurrentMousePosition = Point.Empty;
+		private Point PreviousCursorPosition = Point.Empty;
 		private KeyEventArgs keyEventArgs = null;
-		private Point PositionOnGrid;
+		private Point PreviousGridPosition;
 		private bool AdjustPostion = false;
 
 		/// <summary>
 		/// The backgrond of the <see cref="Canvas"/>
 		/// </summary>
 		public Grid Grid { get; set; } = new Grid(Color.White, Color.Aqua, 10);
+
+		public void Fit()
+		{
+			// Determine which is dimension is greater than parent
+			var exceededWidth = ScrollableParent.Width - Grid.Width;
+			var exceededHeight = ScrollableParent.Height - Grid.Height;
+
+			if(exceededWidth < 0 && exceededHeight < 0)
+			{
+				// Both are bigger
+			}
+
+			ScalePercentage = 100;
+		}
 
 		/// <summary>
 		/// The <see cref="ScalePercentage"/> represented as a <see cref="float"/>
@@ -85,19 +99,22 @@ namespace TNTDrawing
 			var point = new Point(300, 300);
 			graphics.FillEllipse(BlackBrush, new Rectangle(point.Subtract(new Point(4, 4)), new Size(8, 8)));
 
-			if (AdjustPostion) RepositionToAlignWithMouse(PointToClient(Cursor.Position), graphics);
+			if (AdjustPostion)
+			{
+				var previousCanvasPosition = PreviousGridPosition.ToCanvasCoordinates(graphics);
+				var currentCanvasPosition = PointToClient(Cursor.Position);
+				RepositionToAlignWithMouse(previousCanvasPosition, currentCanvasPosition);
+				AdjustPostion = false;
+			}
 
 			base.OnPaint(e);
 		}
 
-		private void RepositionToAlignWithMouse(Point canvasPosition, Graphics graphics)
+		private void RepositionToAlignWithMouse(Point previousPosition, Point currentPosition)
 		{
-			var prevCanvasPosition = PositionOnGrid.ToCanvasCoordinates(graphics);
-			var xDelta = prevCanvasPosition.X - canvasPosition.X;
-			var yDelta = prevCanvasPosition.Y - canvasPosition.Y;
-			ScrollableParent.HorizontalScroll.ChangeBy(xDelta);
-			ScrollableParent.VerticalScroll.ChangeBy(yDelta);
-			AdjustPostion = false;
+			var deltaPosition = previousPosition.Subtract(currentPosition);
+			ScrollableParent.HorizontalScroll.ChangeBy(deltaPosition.X);
+			ScrollableParent.VerticalScroll.ChangeBy(deltaPosition.Y);
 		}
 
 		/// <summary>
@@ -118,22 +135,17 @@ namespace TNTDrawing
 		/// </summary>
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
-			var cursorPosition = Cursor.Position;
+			var currentCursorPosition = Cursor.Position;
 			var graphics = GetTransformedGraphics();
-			var origPoint = new Point(e.X, e.Y);
-			var prevPositionOnGrid = PositionOnGrid;
-			PositionOnGrid = origPoint.ToGridCoordinates(graphics);
+			var mousePosition = new Point(e.X, e.Y);
+			PreviousGridPosition = mousePosition.ToGridCoordinates(graphics);
 
 			if (keyEventArgs?.KeyCode == Keys.Space)
 			{
-				var xDelta = CurrentMousePosition.X - cursorPosition.X;
-				var yDelta = CurrentMousePosition.Y - cursorPosition.Y;
-				ScrollableParent.HorizontalScroll.ChangeBy(xDelta);
-				ScrollableParent.VerticalScroll.ChangeBy(yDelta);
+				RepositionToAlignWithMouse(PreviousCursorPosition, currentCursorPosition);
 			}
 
-			CurrentMousePosition.X = cursorPosition.X;
-			CurrentMousePosition.Y = cursorPosition.Y;
+			PreviousCursorPosition = currentCursorPosition;
 
 			Focus();
 			base.OnMouseMove(e);
@@ -169,13 +181,11 @@ namespace TNTDrawing
 				AdjustPostion = true;
 				var graphics = GetTransformedGraphics();
 				var positionOnCanvas = new Point(e.X, e.Y);
-				PositionOnGrid = positionOnCanvas.ToGridCoordinates(graphics);
-				Debug.WriteLine($@"[OnMouseWheel] positionOnCanvas: {positionOnCanvas}  PositionOnGrid: {PositionOnGrid}");
+				PreviousGridPosition = positionOnCanvas.ToGridCoordinates(graphics);
+				Debug.WriteLine($@"[OnMouseWheel] positionOnCanvas: {positionOnCanvas}  PositionOnGrid: {PreviousGridPosition}");
 				ScalePercentage += detents;
 				(e as HandledMouseEventArgs)?.Let(h => h.Handled = true);
 			}
-
-			//Debug.WriteLine($"X: {e.X}  Y: {e.Y}  change: {change}  detents: {detents}  Delta: {e.Delta}  WHEEL_DELTA: {wheelDelta}  Location: {e.Location}  ScalePercentage: {ScalePercentage}");
 		}
 
 		/// <summary>
@@ -183,6 +193,9 @@ namespace TNTDrawing
 		/// </summary>
 		private void OnParentResize(object sender, EventArgs e) => Refresh();
 
+		/// <summary>
+		/// Returns a <see cref="Graphics"/> that has been transformed
+		/// </summary>
 		private Graphics GetTransformedGraphics(Graphics graphics = null)
 		{
 			if (graphics == null) graphics = CreateGraphics();
