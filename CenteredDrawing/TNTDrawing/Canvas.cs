@@ -13,8 +13,8 @@ namespace TNTDrawing
 	public class Canvas : Control
 	{
 		private const int MINIMUM_PADDING = 1000;
+		private const int PADDING = 20;
 
-		private readonly ScrollableControl ScrollableParent = null;
 		private readonly Brush BlackBrush = new SolidBrush(Color.Black);
 
 		private int _ScalePercentage = 100;
@@ -27,20 +27,6 @@ namespace TNTDrawing
 		/// The backgrond of the <see cref="Canvas"/>
 		/// </summary>
 		public Grid Grid { get; set; } = new Grid(Color.White, Color.Aqua, 10);
-
-		public void Fit()
-		{
-			// Determine which is dimension is greater than parent
-			var exceededWidth = ScrollableParent.Width - Grid.Width;
-			var exceededHeight = ScrollableParent.Height - Grid.Height;
-
-			if(exceededWidth < 0 && exceededHeight < 0)
-			{
-				// Both are bigger
-			}
-
-			ScalePercentage = 100;
-		}
 
 		/// <summary>
 		/// The <see cref="ScalePercentage"/> represented as a <see cref="float"/>
@@ -77,12 +63,37 @@ namespace TNTDrawing
 		public Canvas(Control parent, int left, int top, int width, int height)
 			: base(parent, string.Empty, left, top, width, height)
 		{
+			DoubleBuffered = true;
 			parent.SizeChanged += OnParentResize;
-			// Enable scrolling on parent
-			ScrollableParent = Parent as ScrollableControl;
-			ScrollableParent.AutoScroll = true;
-			// Call Refresh when Grid requests it
 			Grid.OnRefreshRequest = () => { Refresh(); };
+		}
+
+		/// <summary>
+		/// Fits the grid within the parent
+		/// </summary>
+		public void Fit()
+		{
+			var parentWidth = Parent.Width;
+			var parentHeight = Parent.Height;
+			var gridWidth = Grid.Width;
+			var gridHeight = Grid.Height;
+			var gridRatio = gridWidth / (gridHeight * 1F);
+			var parentRatio = parentWidth / (parentHeight * 1F);
+			var newScale = 100F;
+
+			if (gridRatio > parentRatio)
+			{
+				// Width is greater
+				newScale = 100 * (parentWidth * 1F) / (gridWidth + PADDING * 2);
+			}
+			else
+			{
+				// Height is greater
+				newScale = 100 * (parentHeight * 1F) / (gridHeight + PADDING * 2);
+			}
+
+			ScalePercentage = Convert.ToInt32(newScale);
+			Location = new Point(Parent.Width / 2 - Width / 2, Parent.Height / 2 - Height / 2);
 		}
 
 		/// <summary>
@@ -112,9 +123,38 @@ namespace TNTDrawing
 
 		private void RepositionToAlignWithMouse(Point previousPosition, Point currentPosition)
 		{
+			var min = 0;
 			var deltaPosition = previousPosition.Subtract(currentPosition);
-			ScrollableParent.HorizontalScroll.ChangeBy(deltaPosition.X);
-			ScrollableParent.VerticalScroll.ChangeBy(deltaPosition.Y);
+			var dx = -deltaPosition.X;
+			var dy = -deltaPosition.Y;
+			var newLocation = Location.Subtract(deltaPosition);
+
+			var newLeft = Left + dx;
+			var newRight = Right + dx;
+			var newTop = Top + dy;
+			var newBottom = Bottom + dy;
+
+			//Debug.WriteLine($"dx: {dx}  dy: {dy}  newLeft: {newLeft}  newRight: {newRight}");
+
+			if (newLeft > min)
+			{
+				newLocation.X = min;
+			}
+			else if (newRight < Parent.Width - min)
+			{
+				newLocation.X = Parent.Width - min - Width;
+			}
+
+			if (newTop > min)
+			{
+				newLocation.Y = min;
+			}
+			else if (newBottom < Parent.Height - min)
+			{
+				newLocation.Y = Parent.Height - min - Height;
+			}
+
+			Location = newLocation;
 		}
 
 		/// <summary>
@@ -182,7 +222,6 @@ namespace TNTDrawing
 				var graphics = GetTransformedGraphics();
 				var positionOnCanvas = new Point(e.X, e.Y);
 				PreviousGridPosition = positionOnCanvas.ToGridCoordinates(graphics);
-				Debug.WriteLine($@"[OnMouseWheel] positionOnCanvas: {positionOnCanvas}  PositionOnGrid: {PreviousGridPosition}");
 				ScalePercentage += detents;
 				(e as HandledMouseEventArgs)?.Let(h => h.Handled = true);
 			}

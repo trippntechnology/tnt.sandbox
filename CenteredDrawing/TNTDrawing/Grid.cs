@@ -157,35 +157,36 @@ namespace TNTDrawing
 		/// </summary>
 		public void Draw(Graphics graphics)
 		{
-			var canvasWidth = Rect.Width;
-			var canvasHeight = Rect.Height;
-
 			if (ForceDraw)// || (Image == null || Image.Width != canvasWidth || Image.Height != canvasHeight))
 			{
+				var rectWidth = Rect.Width;
+				var rectHeight = Rect.Height;
+
 				Debug.WriteLine($"Drawing image");
 				var largeSegment = PixelsPerSegment * 10;
-				GridImage = new Bitmap(canvasWidth, canvasHeight);
+				GridImage = new Bitmap(rectWidth, rectHeight);
 				var imageGraphics = Graphics.FromImage(GridImage);
 
 				imageGraphics.FillRectangle(BackgroundBrush, Rect);
 
-				for (int x = 0; x < canvasWidth; x += PixelsPerSegment)
+				for (int x = 0; x < rectWidth; x += PixelsPerSegment)
 				{
 					LinePen.Width = (x % largeSegment == 0) ? 3 : 1;
-					imageGraphics.DrawLine(LinePen, x, 0, x, canvasHeight);
+					imageGraphics.DrawLine(LinePen, x, 0, x, rectHeight);
 				}
 
-				for (int y = 0; y < canvasHeight; y += PixelsPerSegment)
+				for (int y = 0; y < rectHeight; y += PixelsPerSegment)
 				{
 					LinePen.Width = (y % largeSegment == 0) ? 3 : 1;
-					imageGraphics.DrawLine(LinePen, 0, y, canvasWidth, y);
+					imageGraphics.DrawLine(LinePen, 0, y, rectWidth, y);
 				}
 
 				ForceDraw = false;
 			}
-
+			
 			graphics.DrawImage(GridImage, Rect);
 		}
+
 		private void Refresh()
 		{
 			ForceDraw = true;

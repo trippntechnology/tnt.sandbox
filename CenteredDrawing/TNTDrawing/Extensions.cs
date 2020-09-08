@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
 
 namespace TNTDrawing
 {
@@ -55,17 +54,5 @@ namespace TNTDrawing
 		/// Subtracts the <see cref="Point"/> p2 from <see cref="Point"/> p1
 		/// </summary>
 		public static Point Subtract(this Point p1, Point p2) => new Point(p1.X - p2.X, p1.Y - p2.Y);
-
-		/// <summary>
-		/// Change the <paramref name="properties"/> scroll value by <paramref name="delta"/>
-		/// </summary>
-		public static void ChangeBy(this ScrollProperties properties, int delta)
-		{
-			var max = properties.Maximum;
-			var min = properties.Minimum;
-			var value = properties.Value + delta;
-
-			properties.Value = value < min ? min : (value > max ? max : value);
-		}
 	}
 }

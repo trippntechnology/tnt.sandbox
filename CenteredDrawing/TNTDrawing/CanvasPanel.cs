@@ -26,7 +26,6 @@ namespace TNTDrawing
 			Dock = DockStyle.Fill;
 			Canvas = new Canvas(this, 0, 0, Width, Height);
 			Canvas.BackColor = Color.Yellow;
-			//Canvas.MouseMove += _MyControl_MouseMove;
 		}
 
 		/// <summary>
@@ -34,6 +33,9 @@ namespace TNTDrawing
 		/// </summary>
 		protected override Point ScrollToControl(Control activeControl) => DisplayRectangle.Location;
 
+		/// <summary>
+		/// Fits the grid within the parent
+		/// </summary>
 		public void Fit() => Canvas.Fit();
 	}
 }

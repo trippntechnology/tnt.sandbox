@@ -29,17 +29,17 @@
 		private void InitializeComponent()
 		{
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.fitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.fitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
-			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer1
@@ -59,6 +59,23 @@
 			this.splitContainer1.Size = new System.Drawing.Size(1035, 812);
 			this.splitContainer1.SplitterDistance = 800;
 			this.splitContainer1.TabIndex = 2;
+			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fitToolStripMenuItem});
+			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+			this.menuStrip1.TabIndex = 0;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// fitToolStripMenuItem
+			// 
+			this.fitToolStripMenuItem.Name = "fitToolStripMenuItem";
+			this.fitToolStripMenuItem.Size = new System.Drawing.Size(32, 20);
+			this.fitToolStripMenuItem.Text = "Fit";
+			this.fitToolStripMenuItem.Click += new System.EventHandler(this.fitToolStripMenuItem_Click);
 			// 
 			// propertyGrid1
 			// 
@@ -84,23 +101,6 @@
 			this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
 			this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
 			// 
-			// menuStrip1
-			// 
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fitToolStripMenuItem});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-			this.menuStrip1.TabIndex = 0;
-			this.menuStrip1.Text = "menuStrip1";
-			// 
-			// fitToolStripMenuItem
-			// 
-			this.fitToolStripMenuItem.Name = "fitToolStripMenuItem";
-			this.fitToolStripMenuItem.Size = new System.Drawing.Size(32, 20);
-			this.fitToolStripMenuItem.Text = "Fit";
-			this.fitToolStripMenuItem.Click += new System.EventHandler(this.fitToolStripMenuItem_Click);
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -117,10 +117,10 @@
 			this.splitContainer1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
-			this.statusStrip1.ResumeLayout(false);
-			this.statusStrip1.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
