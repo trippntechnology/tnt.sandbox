@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -15,13 +14,12 @@ namespace TNTDrawing
 		private const int MINIMUM_PADDING = 1000;
 		private const int PADDING = 20;
 
-		private readonly Brush BlackBrush = new SolidBrush(Color.Black);
-
 		private int _ScalePercentage = 100;
-		private Point PreviousCursorPosition = Point.Empty;
-		private KeyEventArgs keyEventArgs = null;
-		private Point PreviousGridPosition;
 		private bool AdjustPostion = false;
+		private KeyEventArgs keyEventArgs = null;
+		private Point PreviousCursorPosition = Point.Empty;
+		private Point PreviousGridPosition;
+		private ScrollableControl ScrollableParent = null;
 
 		/// <summary>
 		/// The backgrond of the <see cref="Canvas"/>
@@ -65,6 +63,8 @@ namespace TNTDrawing
 		{
 			DoubleBuffered = true;
 			parent.SizeChanged += OnParentResize;
+			ScrollableParent = (Parent as ScrollableControl);
+			ScrollableParent.AutoScroll = true;
 			Grid.OnRefreshRequest = () => { Refresh(); };
 		}
 
@@ -79,7 +79,7 @@ namespace TNTDrawing
 			var gridHeight = Grid.Height;
 			var gridRatio = gridWidth / (gridHeight * 1F);
 			var parentRatio = parentWidth / (parentHeight * 1F);
-			var newScale = 100F;
+			float newScale;
 
 			if (gridRatio > parentRatio)
 			{
@@ -93,7 +93,8 @@ namespace TNTDrawing
 			}
 
 			ScalePercentage = Convert.ToInt32(newScale);
-			Location = new Point(Parent.Width / 2 - Width / 2, Parent.Height / 2 - Height / 2);
+			var position = new Point(-(Parent.Width / 2 - Width / 2), -(Parent.Height / 2 - Height / 2));
+			ScrollableParent.AutoScrollPosition = position;
 		}
 
 		/// <summary>
@@ -101,14 +102,10 @@ namespace TNTDrawing
 		/// </summary>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			Debug.WriteLine($"OnPaint AdjustPostion: {AdjustPostion}");
 			UpdateClientDimensions();
 			var graphics = GetTransformedGraphics(e.Graphics);
 
 			Grid.Draw(graphics);
-
-			var point = new Point(300, 300);
-			graphics.FillEllipse(BlackBrush, new Rectangle(point.Subtract(new Point(4, 4)), new Size(8, 8)));
 
 			if (AdjustPostion)
 			{
@@ -134,8 +131,6 @@ namespace TNTDrawing
 			var newTop = Top + dy;
 			var newBottom = Bottom + dy;
 
-			//Debug.WriteLine($"dx: {dx}  dy: {dy}  newLeft: {newLeft}  newRight: {newRight}");
-
 			if (newLeft > min)
 			{
 				newLocation.X = min;
@@ -154,7 +149,7 @@ namespace TNTDrawing
 				newLocation.Y = Parent.Height - min - Height;
 			}
 
-			Location = newLocation;
+			ScrollableParent.AutoScrollPosition = new Point(-newLocation.X, -newLocation.Y);
 		}
 
 		/// <summary>
