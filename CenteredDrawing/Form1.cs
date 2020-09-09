@@ -16,7 +16,7 @@ namespace CenteredDrawing
 			applicationRegistery = new ApplicationRegistry(this, Registry.CurrentUser, "Tripp'n Technology", "CenteredDrawing");
 			_MyControl = new CanvasPanel(splitContainer1.Panel1);
 			_MyControl.MouseMove += _MyControl_MouseMove;
-			propertyGrid1.SelectedObject = _MyControl;
+			propertyGrid1.SelectedObject = _MyControl.Canvas;
 		}
 
 		private void _MyControl_MouseMove(object sender, MouseEventArgs e)

@@ -23,11 +23,6 @@ namespace TNTDrawing
 		protected int _PixelsPerSegment = 10;
 
 		/// <summary>
-		/// <see cref="SolidBrush"/> used the paint the background of the <see cref="Grid"/>
-		/// </summary>
-		protected SolidBrush BackgroundBrush { get; set; } = new SolidBrush(Color.White);
-
-		/// <summary>
 		/// <see cref="Pen"/> used to draw the lines on the <see cref="Grid"/>
 		/// </summary>
 		protected Pen LinePen { get; set; } = new Pen(Color.Black);
@@ -76,20 +71,6 @@ namespace TNTDrawing
 			set
 			{
 				LinePen.Color = value;
-				Refresh();
-			}
-		}
-
-		/// <summary>
-		/// The background color of the grid
-		/// </summary>
-		[Category("Appearance")]
-		public Color BackgroundColor
-		{
-			get { return BackgroundBrush.Color; }
-			set
-			{
-				BackgroundBrush.Color = value;
 				Refresh();
 			}
 		}
@@ -145,11 +126,10 @@ namespace TNTDrawing
 		/// <summary>
 		/// Initializes the <see cref="Grid"/>
 		/// </summary>
-		public Grid(Color backgroundColor, Color lineColor, int pixelsBetweenLines)
+		public Grid(Color lineColor, int pixelsBetweenLines)
 		{
 			PixelsPerSegment = pixelsBetweenLines;
 			LineColor = lineColor;
-			BackgroundBrush.Color = backgroundColor;
 		}
 
 		/// <summary>
@@ -167,8 +147,6 @@ namespace TNTDrawing
 				GridImage = new Bitmap(rectWidth, rectHeight);
 				var imageGraphics = Graphics.FromImage(GridImage);
 
-				imageGraphics.FillRectangle(BackgroundBrush, Rect);
-
 				for (int x = 0; x < rectWidth; x += PixelsPerSegment)
 				{
 					LinePen.Width = (x % largeSegment == 0) ? 3 : 1;
@@ -183,7 +161,7 @@ namespace TNTDrawing
 
 				ForceDraw = false;
 			}
-			
+
 			graphics.DrawImage(GridImage, Rect);
 		}
 

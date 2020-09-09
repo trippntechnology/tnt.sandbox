@@ -15,7 +15,9 @@ namespace TNTDrawing
 		private const int PADDING = 20;
 
 		private int _ScalePercentage = 100;
+		private bool _ShowGrid = true;
 		private bool AdjustPostion = false;
+		private SolidBrush BackgrounBrush = new SolidBrush(Color.White);
 		private KeyEventArgs keyEventArgs = null;
 		private Point PreviousCursorPosition = Point.Empty;
 		private Point PreviousGridPosition;
@@ -24,11 +26,12 @@ namespace TNTDrawing
 		/// <summary>
 		/// The backgrond of the <see cref="Canvas"/>
 		/// </summary>
-		public Grid Grid { get; set; } = new Grid(Color.White, Color.Aqua, 10);
+		public Grid Grid { get; set; } = new Grid(Color.Aqua, 10);
 
 		/// <summary>
 		/// The <see cref="ScalePercentage"/> represented as a <see cref="float"/>
 		/// </summary>
+		[Browsable(false)]
 		public float Zoom { get { return ScalePercentage / 100F; } }
 
 		/// <summary>
@@ -38,22 +41,40 @@ namespace TNTDrawing
 		public int ScalePercentage
 		{
 			get { return _ScalePercentage; }
+			set { _ScalePercentage = value; Refresh(); }
+		}
+
+		/// <summary>
+		/// Grid visibility
+		/// </summary>
+		public bool ShowGrid
+		{
+			get { return _ShowGrid; }
 			set
 			{
-				_ScalePercentage = value;
+				_ShowGrid = value;
 				Refresh();
 			}
 		}
 
 		/// <summary>
+		/// Canvas background color
+		/// </summary>
+		public Color BackgroundColor
+		{
+			get { return BackgrounBrush.Color; }
+			set { BackgrounBrush.Color = value; Refresh(); }
+		}
+
+		/// <summary>
 		/// Scaled grid width
 		/// </summary>
-		public float ScaledWidth { get { return Grid.Width * Zoom; } }
+		protected float ScaledWidth { get { return Grid.Width * Zoom; } }
 
 		/// <summary>
 		/// Scaled grid height
 		/// </summary>
-		public float ScaledHeight { get { return Grid.Height * Zoom; } }
+		protected float ScaledHeight { get { return Grid.Height * Zoom; } }
 
 		/// <summary>
 		/// Initializes a <see cref="Canvas"/>
@@ -105,7 +126,8 @@ namespace TNTDrawing
 			UpdateClientDimensions();
 			var graphics = GetTransformedGraphics(e.Graphics);
 
-			Grid.Draw(graphics);
+			graphics.FillRectangle(BackgrounBrush, Grid.Rect);
+			if (ShowGrid) Grid.Draw(graphics);
 
 			if (AdjustPostion)
 			{
@@ -189,12 +211,25 @@ namespace TNTDrawing
 		/// <summary>
 		/// Sets <see cref="KeyEventArgs"/>
 		/// </summary>
-		protected override void OnKeyDown(KeyEventArgs e) => keyEventArgs = e;
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			keyEventArgs = e;
+			switch (keyEventArgs.KeyCode)
+			{
+				case Keys.Space:
+					Cursor = Cursors.Hand;
+					break;
+			}
+		}
 
 		/// <summary>
 		/// Sets <see cref="KeyEventArgs"/>
 		/// </summary>
-		protected override void OnKeyUp(KeyEventArgs e) => keyEventArgs = null;
+		protected override void OnKeyUp(KeyEventArgs e)
+		{
+			keyEventArgs = null;
+			Cursor = Cursors.Default;
+		}
 
 		/// <summary>
 		/// Changes <see cref="ScalePercentage"/>
