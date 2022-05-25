@@ -8,8 +8,11 @@ using System.Windows.Forms;
 
 namespace Maze
 {
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
+		private Point START_POINT = new Point(10, 10);
+		private Point? END_POINT = null;
+
 		const int BOUNDARY_PADDING = 10;
 		int LEFT_BOUNDARY = 10;
 		int TOP_BOUNDARY = 10;
@@ -19,19 +22,16 @@ namespace Maze
 		const int PATH_WIDTH = POINT_SPACING - 2;
 
 		private Pen _Pen = new Pen(Color.White, PATH_WIDTH) { StartCap = LineCap.Round, EndCap = LineCap.Round };
-		private Pen PathPen = new Pen(Color.Red, PATH_WIDTH-4) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+		private Pen PathPen = new Pen(Color.Red, PATH_WIDTH - 4) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 		private Graphics _Graphics = null;
 		private Random _Random = new Random();
 		private Bitmap _bitmap;
 		private Graphics bGraphics;
 
-		private Point startPoint;
-		private Point endPoint;
-
 		Dictionary<Point, int> VisitedPoints = new Dictionary<Point, int>();
 		Dictionary<Point, List<Point>> PointMap = new Dictionary<Point, List<Point>>();
 
-		public Form1()
+		public MainForm()
 		{
 			InitializeComponent();
 		}
@@ -47,9 +47,13 @@ namespace Maze
 			_Graphics.FillRectangle(new SolidBrush(Color.Black), panel1.Bounds);
 			VisitedPoints.Clear();
 			PointMap.Clear();
-			var point = new Point(10, 10);
-			VisitedPoints.Add(point, 0);
-			DrawNextPoint(point);
+			VisitedPoints.Add(START_POINT, 0);
+
+			END_POINT = new Point(RIGHT_BOUNDARY / POINT_SPACING * POINT_SPACING, BOTTOM_BOUNDARY / POINT_SPACING * POINT_SPACING);
+
+			label4.Text = END_POINT.ToString();
+
+			DrawNextPoint(START_POINT);
 		}
 
 		private void DrawNextPoint(Point currentPoint)
@@ -79,6 +83,8 @@ namespace Maze
 
 		private Point? GetNextPoint(Point point)
 		{
+			if (END_POINT?.X == point.X && END_POINT?.Y == point.Y) return null;
+
 			var availableDirections = new List<Direction>(new Direction[] { Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP });
 
 			while (availableDirections.Count > 0)
@@ -150,37 +156,17 @@ namespace Maze
 			BOTTOM_BOUNDARY = panel1.Height - BOUNDARY_PADDING * 2;
 		}
 
-		private void panel1_MouseUp(object sender, MouseEventArgs e)
-		{
-			switch (e.Button)
-			{
-				case MouseButtons.Left:
-					startPoint = normalizePoint(e.Location);
-					label2.Text = startPoint.ToString();
-					break;
-				case MouseButtons.Right:
-					endPoint = normalizePoint(e.Location);
-					label3.Text = endPoint.ToString();
-					break;
-			}
-		}
-
-		private void panel2_Paint(object sender, PaintEventArgs e)
-		{
-
-		}
-
 		private void button3_Click(object sender, EventArgs e)
 		{
 			// Get start points children
-			var points = PointMap[startPoint];
+			var points = PointMap[START_POINT];
 			_Graphics.DrawImage(_bitmap, new Point(0, 0));
-			FindEndPoint(startPoint);
+			FindEndPoint(START_POINT);
 		}
 
 		private bool FindEndPoint(Point currentPoint)
 		{
-			if (currentPoint == this.endPoint)
+			if (currentPoint == this.END_POINT)
 			{
 				return true;
 			}
