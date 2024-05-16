@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
+
 namespace ConfigurationBuilderSample;
 
 internal class Program
@@ -23,6 +24,9 @@ internal class Program
     settings?.IPAddressRange.ForEach(ip => Console.WriteLine(ip));
 
     Console.WriteLine($"Inventory = {connectionStrings?.Inventory}");
+
+    PaletteNodeSection? paletteNodeSection = config.GetRequiredSection("PaletteNodeSection").Get<PaletteNodeSection>();
+    Console.WriteLine($"PaletteFile: {paletteNodeSection?.PaletteFile}");
   }
 }
 
