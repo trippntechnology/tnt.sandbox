@@ -26,7 +26,7 @@ internal class StartPageHandler(Document document) : IEventHandler
     // Calculate the position for the bottom paragraph
     float x = document.GetLeftMargin();
     float y = defaultPageSize.GetHeight() - document.GetTopMargin();
-    float width = defaultPageSize.GetWidth() - document.GetLeftMargin() - document.GetRightMargin();
+    float width = defaultPageSize.GetWidth() - document.GetRightMargin();
     var pageNumber = pdfDoc.GetPageNumber(page);
 
     // Show text aligned at the bottom

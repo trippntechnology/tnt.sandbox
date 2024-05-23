@@ -11,9 +11,7 @@ public partial class Form1 : Form
   public Form1()
   {
     InitializeComponent();
-    string fileName = "PDFGeneratorTest.pdf";
-    string appPath = AppContext.BaseDirectory;
-    string uri = Path.Combine(appPath, fileName);
+    string uri = Path.Combine(AppContext.BaseDirectory, "PDFGeneratorTest.pdf");
     createPdf(uri);
     Browser.Navigate(uri);
   }
@@ -29,6 +27,9 @@ public partial class Form1 : Form
         // Create a Document object
         using (Document document = new Document(pdf))
         {
+          document.SetTopMargin(72);
+          document.SetBottomMargin(72);
+
           // Define the header
           pdf.AddEventHandler(PdfDocumentEvent.START_PAGE, new StartPageHandler(document));
 

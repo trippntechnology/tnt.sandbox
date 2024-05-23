@@ -1,5 +1,6 @@
 ﻿using iText.Kernel.Events;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
@@ -15,6 +16,7 @@ class EndPageHandler(Document document) : IEventHandler
     PdfDocumentEvent docEvent = (PdfDocumentEvent)@event;
     PdfPage page = docEvent.GetPage();
     PdfDocument pdfDoc = docEvent.GetDocument();
+    PdfCanvas pdfCanvas = new PdfCanvas(page);
     int pageNumber = pdfDoc.GetPageNumber(page);
 
     // Add the paragraph at the bottom of the page
@@ -23,9 +25,14 @@ class EndPageHandler(Document document) : IEventHandler
     // Calculate the position for the bottom paragraph
     float x = document.GetLeftMargin();
     float y = document.GetBottomMargin();
-    float width = pdfDoc.GetDefaultPageSize().GetWidth() - document.GetLeftMargin() - document.GetRightMargin();
+    float width = pdfDoc.GetDefaultPageSize().GetWidth() - document.GetRightMargin();
 
     // Show text aligned at the bottom
-    document.ShowTextAligned(bottomParagraph, x, y, pageNumber, TextAlignment.LEFT, VerticalAlignment.BOTTOM, 0);
+    document.ShowTextAligned(bottomParagraph, x, y, pageNumber, TextAlignment.LEFT, VerticalAlignment.TOP, 0);
+
+    // Draw a line in the header
+    pdfCanvas.MoveTo(x, y)
+      .LineTo(width, y)
+      .ClosePathStroke();
   }
 }
