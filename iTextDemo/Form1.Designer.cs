@@ -28,32 +28,34 @@ partial class Form1
   /// </summary>
   private void InitializeComponent()
   {
-			this.Browser = new System.Windows.Forms.WebBrowser();
-			this.SuspendLayout();
-			// 
-			// Browser
-			// 
-			this.Browser.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.Browser.Location = new System.Drawing.Point(0, 0);
-			this.Browser.MinimumSize = new System.Drawing.Size(20, 20);
-			this.Browser.Name = "Browser";
-			this.Browser.Size = new System.Drawing.Size(646, 679);
-			this.Browser.TabIndex = 0;
-			// 
-			// Form1
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(646, 679);
-			this.Controls.Add(this.Browser);
-			this.Name = "Form1";
-			this.Text = "Form1";
-			this.ResumeLayout(false);
+    Browser = new WebBrowser();
+    SuspendLayout();
+    // 
+    // Browser
+    // 
+    Browser.Dock = DockStyle.Fill;
+    Browser.Location = new Point(0, 0);
+    Browser.Margin = new Padding(4, 3, 4, 3);
+    Browser.MinimumSize = new Size(23, 23);
+    Browser.Name = "Browser";
+    Browser.Size = new Size(754, 783);
+    Browser.TabIndex = 0;
+    // 
+    // Form1
+    // 
+    AutoScaleDimensions = new SizeF(7F, 15F);
+    AutoScaleMode = AutoScaleMode.Font;
+    ClientSize = new Size(754, 783);
+    Controls.Add(Browser);
+    Margin = new Padding(4, 3, 4, 3);
+    Name = "Form1";
+    Text = "Form1";
+    TopMost = true;
+    ResumeLayout(false);
+  }
 
-		}
+  #endregion
 
-		#endregion
-
-		private System.Windows.Forms.WebBrowser Browser;
+  private System.Windows.Forms.WebBrowser Browser;
 	}
 
