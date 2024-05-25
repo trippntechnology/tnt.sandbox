@@ -19,9 +19,10 @@ public partial class Form1 : Form
   {
     InitializeComponent();
     string uri = Path.Combine(AppContext.BaseDirectory, "PDFGeneratorTest.pdf");
-    createPdf(uri);
+    new MyPdfGenerator().Generate(uri);
     Browser.Navigate(uri);
   }
+
 
   private void createPdf(string filename)
   {
@@ -38,10 +39,10 @@ public partial class Form1 : Form
           document.SetBottomMargin(72);
 
           // Define the header
-          pdf.AddEventHandler(PdfDocumentEvent.START_PAGE, new StartPageHandler(document));
+          //pdf.AddEventHandler(PdfDocumentEvent.START_PAGE, new StartPageHandler(document));
 
           // Define the footer
-          pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new EndPageHandler(document));
+          //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new EndPageHandler(document));
 
           // Add content to the document
           document.Add(new Paragraph("Hello, iText!"));
