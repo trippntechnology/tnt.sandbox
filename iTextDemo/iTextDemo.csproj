@@ -13,4 +13,10 @@
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="70_80.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
