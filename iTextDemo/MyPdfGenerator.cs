@@ -1,10 +1,10 @@
 ﻿using iText.IO.Font.Constants;
 using iText.IO.Image;
-using iText.Kernel.Events;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
+using iText.Kernel.Pdf.Event;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
@@ -20,8 +20,10 @@ internal class MyPdfGenerator : PdfGenerator
 {
   class StartPageHandler(Document document) : BaseEventHandler(document)
   {
-    protected override void HandleEvent(PdfDocumentEvent pdfDocumentEvent, PdfPage pdfPage, PdfDocument pdfDocument)
+    protected override void HandleEvent(PdfDocumentEvent pdfDocumentEvent, PdfPage? pdfPage, PdfDocument pdfDocument)
     {
+      if (pdfPage == null) return;
+
       PageSize pageSize = pdfDocument.GetDefaultPageSize();
       PdfCanvas pdfCanvas = new PdfCanvas(pdfPage);
 
@@ -29,12 +31,12 @@ internal class MyPdfGenerator : PdfGenerator
 
       Cell cell1 = new Cell().Add(new Paragraph("Paragraph 1 Text"))
         .SetBorder(Border.NO_BORDER)
-        .SetBorderBottom(new SolidBorder(iText.Kernel.Colors.ColorConstants.RED, 2f));
+        .SetBorderBottom(new SolidBorder(iTextColorConstants.RED, 2f));
       table.AddCell(cell1);
 
       Cell cell2 = new Cell().Add(new Paragraph("Paragraph 2 Text"))
         .SetBorder(Border.NO_BORDER)
-        .SetBorderBottom(new SolidBorder(iText.Kernel.Colors.ColorConstants.RED, 2f))
+        .SetBorderBottom(new SolidBorder(iTextColorConstants.RED, 2f))
         .SetTextAlignment(TextAlignment.RIGHT);
       table.AddCell(cell2);
 
@@ -46,12 +48,19 @@ internal class MyPdfGenerator : PdfGenerator
       PdfCanvas canvas = new PdfCanvas(pdfPage.NewContentStreamBefore(), pdfPage.GetResources(), pdfDocument);
       new Canvas(canvas, new iText.Kernel.Geom.Rectangle(0, 0, x, y)).Add(table);
     }
+
+    protected override void OnAcceptedEvent(AbstractPdfDocumentEvent @event)
+    {
+      throw new NotImplementedException();
+    }
   }
 
   class EndPageHandler(Document document) : BaseEventHandler(document)
   {
-    protected override void HandleEvent(PdfDocumentEvent pdfDocumentEvent, PdfPage pdfPage, PdfDocument pdfDocument)
+    protected override void HandleEvent(PdfDocumentEvent pdfDocumentEvent, PdfPage? pdfPage, PdfDocument pdfDocument)
     {
+      if (pdfPage == null) return;
+
       PdfCanvas pdfCanvas = new PdfCanvas(pdfPage);
       int pageNumber = pdfDocument.GetPageNumber(pdfPage);
 
@@ -70,6 +79,11 @@ internal class MyPdfGenerator : PdfGenerator
       pdfCanvas.MoveTo(x, y)
         .LineTo(width, y)
         .ClosePathStroke();
+    }
+
+    protected override void OnAcceptedEvent(AbstractPdfDocumentEvent @event)
+    {
+      throw new NotImplementedException();
     }
   }
 

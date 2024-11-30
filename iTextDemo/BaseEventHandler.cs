@@ -1,18 +1,19 @@
-﻿using iText.Kernel.Events;
+﻿using iText.Commons.Actions;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Event;
 using iText.Layout;
 
 namespace iTextDemo;
 
-internal abstract class BaseEventHandler(Document document) : IEventHandler
+internal abstract class BaseEventHandler(Document document) : AbstractPdfDocumentEventHandler
 {
   protected readonly Document document = document;
 
-  public virtual void HandleEvent(Event @event)
+  override public void OnEvent(IEvent @event)
   {
     PdfDocumentEvent docEvent = (PdfDocumentEvent)@event;
     HandleEvent(docEvent, docEvent.GetPage(), docEvent.GetDocument());
   }
 
-  protected abstract void HandleEvent(PdfDocumentEvent pdfDocumentEvent, PdfPage pdfPage, PdfDocument pdfDocument);
+  protected abstract void HandleEvent(PdfDocumentEvent pdfDocumentEvent, PdfPage? pdfPage, PdfDocument pdfDocument);
 }
