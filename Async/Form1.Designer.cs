@@ -66,7 +66,7 @@
 			this.textBox1.Name = "textBox1";
 			this.textBox1.Size = new System.Drawing.Size(247, 20);
 			this.textBox1.TabIndex = 3;
-			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUpAsync);
+			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
 			// 
 			// Form1
 			// 
