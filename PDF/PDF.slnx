@@ -1,0 +1,42 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="Mixed Platforms" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="CreateByteArray/CreateByteArray.csproj">
+    <Build Solution="*|x86" Project="false" />
+  </Project>
+  <Project Path="Encryption/Encryption.csproj">
+    <Platform Project="x86" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="iText101/iText101.csproj">
+    <Platform Project="x86" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="iText142/iText142.csproj">
+    <Platform Project="x86" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="iText21/iText21.csproj">
+    <Platform Project="x86" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="iText226/iText226.csproj">
+    <Build Solution="*|x86" Project="false" />
+  </Project>
+  <Project Path="iText41/iText41.csproj">
+    <Platform Project="x86" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="iText51/iText51.csproj">
+    <Platform Project="x86" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="iText61/iText61.csproj" />
+  <Project Path="iText615/iText615.csproj">
+    <Platform Project="x86" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+</Solution>
